@@ -34,9 +34,9 @@ const createUserDocument = async (req, res) => {
             email, 
             phone, 
             password, 
-            fullname, 
+            firstName,
+            lastName, 
             gender, 
-            category, 
             landlineNum, 
             faxNum, 
             address, 
@@ -49,9 +49,9 @@ const createUserDocument = async (req, res) => {
             email, 
             phone, 
             password: hashedPassword, 
-            fullname, 
-            gender, 
-            category, 
+            firstName,
+            lastName, 
+            gender,
             landlineNum, 
             faxNum, 
             address, 
@@ -76,6 +76,52 @@ const createUserDocument = async (req, res) => {
     }
 };
 
+const validateUserData = async (req, res) => {
+    try {
+        const {
+            cnic,
+            email,
+            phone,
+        } = req.body;
+
+        const [existingCNIC, existingEmail, existingPhone] = await Promise.all([
+            User.exists({ cnic }),
+            User.exists({ email }),
+            User.exists({ phone }),
+        ]);
+
+        if (existingCNIC) {
+            return res.status(500).json({ error: "User with this CNIC already exists." });
+        }
+        if (existingEmail) {
+            return res.status(500).json({ error: "User with this email already exists." });
+        }
+        if (existingPhone) {
+            return res.status(500).json({ error: "User with this phone no. already exists." });
+        }
+
+        res.status(200).json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred during data validation." });
+    }
+};
+
+const fetchUserByEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(500).json({ error: "User with this email does not exist." });
+        }
+
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while fetching user by email." });
+    }
+};
+
 const updateUserData = async (req, res) => {
     try 
     {
@@ -85,9 +131,9 @@ const updateUserData = async (req, res) => {
             email, 
             phone, 
             password, 
-            fullname, 
+            firstName,
+            lastName, 
             gender, 
-            category, 
             landlineNum, 
             faxNum, 
             address, 
@@ -104,9 +150,9 @@ const updateUserData = async (req, res) => {
             email, 
             phone, 
             password, 
-            fullname, 
-            gender, 
-            category, 
+            firstName,
+            lastName,  
+            gender,
             landlineNum, 
             faxNum, 
             address, 
@@ -134,20 +180,23 @@ const updateUserData = async (req, res) => {
 
 const changePassword = async (req, res) => {
     const userId = req.params.id;
-    const { password, newPassword } = req.body;
+    const { password, newPassword, isNew } = req.body;
 
     try {
         const userData = await User.findById({ _id: userId });
-        const oldPasswordMatch = await bcrypt.compare(password, userData.password);
+        if(isNew !== true)
+        {
+            const oldPasswordMatch = await bcrypt.compare(password, userData.password);
 
-        if (!oldPasswordMatch) {
-            return res.status(401).json({ message: "Invalid Password" });
-        }
+            if (!oldPasswordMatch) {
+                return res.status(401).json({ message: "Invalid Password" });
+            }
 
-        const newPasswordMatch = await bcrypt.compare(newPassword, userData.password);
+            const newPasswordMatch = await bcrypt.compare(newPassword, userData.password);
 
-        if (newPasswordMatch) {
-            return res.status(401).json({ message: "New and old password cannot be the same." });
+            if (newPasswordMatch) {
+                return res.status(401).json({ message: "New and old password cannot be the same." });
+            }
         }
         let hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -182,5 +231,7 @@ module.exports = {
     createUserDocument,
     updateUserData,
     changePassword,
-    deleteUserData
+    deleteUserData,
+    validateUserData,
+    fetchUserByEmail
 };

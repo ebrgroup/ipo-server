@@ -6,6 +6,7 @@ if (process.env.NODE_ENV != "production") {
 // Import dependencies
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
 const connectToDb = require("./config/connectToDb");
 const authMiddleware = require("./middlewares/auth");
 
@@ -24,7 +25,13 @@ connectToDb();
 
 // Routing
 app.use("/ipo", authenticationRoute);
-app.use("/ipo", authMiddleware, userRoutes);
+app.use("/ipo", userRoutes);
+
+app.use(express.static(path.join(__dirname, './client/build')));
+
+app.get('*', (req, res) => {
+    res.sendfile(path.join(__dirname, './client/build/index.html'));
+});
 
 // Start our server
 app.listen(process.env.PORT);
