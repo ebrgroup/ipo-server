@@ -130,7 +130,7 @@ const updateUserData = async (req, res) => {
             cnic, 
             email, 
             phone, 
-            password, 
+            // password, 
             firstName,
             lastName, 
             gender, 
@@ -140,16 +140,16 @@ const updateUserData = async (req, res) => {
             province, 
             city 
          } = req.body;
-        let hashedPassword = undefined;
+        // let hashedPassword = undefined;
 
-        if(password !== undefined)
-            hashedPassword = await bcrypt.hash(password, 10);
+        // if(password !== undefined)
+        //     hashedPassword = await bcrypt.hash(password, 10);
 
         await User.findByIdAndUpdate(userId, { 
             cnic, 
             email, 
             phone, 
-            password, 
+            // password, 
             firstName,
             lastName,  
             gender,
@@ -159,7 +159,7 @@ const updateUserData = async (req, res) => {
             province, 
             city 
         });
-        const userData = await User.findById(accountId);
+        const userData = await User.findById({ _id: userId });
         res.status(200).json({ userData });
     } 
     catch (error) 
@@ -173,7 +173,7 @@ const updateUserData = async (req, res) => {
         else if (error.code === 11000 && error.keyPattern.phone === 1) {
             res.status(500).json({ error: "User with this phone no. already exists." });
         } else {
-            res.status(500).json({ error: "An error has occurred while writing the user data." });
+            res.status(401).json({ error: "An error has occurred while updating the user data." });
         }
     }
 };
