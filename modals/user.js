@@ -12,8 +12,11 @@ const users = mongoose.Schema({
     faxNum: String,
     address: String,
     province: String,
-    city: String
+    city: String,
+    resetToken: { type: String, default: null, unique: true },
+    resetTokenExpiry: { type: Date, default: null }
 });
+
 
 const Users = mongoose.model('user', users);
 
