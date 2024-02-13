@@ -198,7 +198,7 @@ const checkResetPasswordLink = async (req, res) => {
         if (process.env.NODE_ENV != "production") {
             return res.redirect(`http://localhost:3000/createnewpassword/${token}`); 
         }
-        res.redirect(`https://ipo-pk.cyclic.app/createnewpassword/${token}`);
+        return res.redirect(`https://ipo-pk.cyclic.app/createnewpassword/${token}`);
     } catch(error) {
         res.status(404).json({ error: error.message });
     }
