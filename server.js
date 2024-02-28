@@ -12,11 +12,12 @@ const connectToDb = require("./config/connectToDb");
 const authMiddleware = require("./middlewares/auth");
 const userController = require("./controllers/userController");
 
-const { 
+const {
     authenticationRoute,
     userRoutes,
     emailRoutes,
-    messagingRoutes
+    messagingRoutes,
+    ipRoutes
 } = require("./routes/index");
 
 // Create an express app
@@ -30,6 +31,7 @@ app.use("/ipo", authenticationRoute);
 app.use("/ipo", userRoutes);
 app.use("/ipo", emailRoutes);
 app.use("/ipo", messagingRoutes);
+app.use("/ipo", ipRoutes);
 app.get("/ipo/users/Request/:id", (req, res) => {
     userController.checkResetPasswordLink(req, res);
 });
