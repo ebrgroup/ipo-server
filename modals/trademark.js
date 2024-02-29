@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const trademarkSchema = mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, sparse: true },
+    trademarkId: { type: String, unique: true },
+    fileDate: Date,
+    status: { type: String, default: "Register" },
     applicationOwner: {
         ownerType: { type: String, sparse: true },
         licenseNo: { type: String, sparse: true },
