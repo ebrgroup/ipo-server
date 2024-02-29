@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const connectToDb = require("./config/connectToDb");
 const authMiddleware = require("./middlewares/auth");
 const userController = require("./controllers/userController");
+const multer = require('multer');
 
 const { 
     authenticationRoute,
@@ -25,6 +26,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Routing
 app.use("/ipo", authenticationRoute);

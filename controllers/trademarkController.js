@@ -4,9 +4,7 @@ const insertTradeMark = async (req, res) => {
     try {
         const cleanedData = removeEmptyFields(req.body);
         const newTrademark = new Trademark(cleanedData);
-        console.log(newTrademark)
         await newTrademark.save();
-        console.log("Success")
         res.status(201).json({ message: 'Trademark created successfully', trademark: newTrademark });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create trademark' });
