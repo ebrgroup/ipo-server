@@ -31,7 +31,7 @@ const trademarkSchema = mongoose.Schema({
         logoDescrpiption: { type: String, sparse: true },
         domainName: { type: String, sparse: true },
         colorClaimed: { type: String, sparse: true },
-        logoImage: Buffer
+        logoFile: Buffer
     }
 });
 
