@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const trademarkSchema = mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, sparse: true },
     trademarkId: { type: String, unique: true },
-    fileDate: Date,
+    fileDate: {type:String},
     status: { type: String, default: "Register" },
     applicationOwner: {
         ownerType: { type: String, sparse: true },
@@ -28,10 +28,11 @@ const trademarkSchema = mongoose.Schema({
         }
     },
     logoDetails: {
+        markDesc: { type: String, sparse: true },
         logoDescrpiption: { type: String, sparse: true },
         domainName: { type: String, sparse: true },
         colorClaimed: { type: String, sparse: true },
-        logoImage: Buffer
+        logoFile: Buffer
     }
 });
 

@@ -18,7 +18,6 @@ const {
     userRoutes,
     emailRoutes,
     messagingRoutes,
-    ipRoutes,
     trademarkRoutes
 } = require("./routes/index");
 
@@ -36,7 +35,6 @@ app.use("/ipo", authenticationRoute);
 app.use("/ipo", userRoutes);
 app.use("/ipo", emailRoutes);
 app.use("/ipo", messagingRoutes);
-app.use("/ipo", ipRoutes);
 app.use("/ipo", trademarkRoutes);
 app.get("/ipo/users/Request/:id", (req, res) => {
     userController.checkResetPasswordLink(req, res);
