@@ -13,7 +13,7 @@ const authMiddleware = require("./middlewares/auth");
 const userController = require("./controllers/userController");
 const multer = require('multer');
 
-const { 
+const {
     authenticationRoute,
     userRoutes,
     emailRoutes,
