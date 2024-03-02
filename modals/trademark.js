@@ -4,7 +4,7 @@ const trademarkSchema = mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, sparse: true },
     trademarkId: { type: String, unique: true },
     fileDate: {type:String},
-    status: { type: String, default: "Register" },
+    status: { type: String, default: "Pending" },
     applicationOwner: {
         ownerType: { type: String, sparse: true },
         licenseNo: { type: String, sparse: true },

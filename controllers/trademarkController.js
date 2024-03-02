@@ -20,7 +20,9 @@ const insertTradeMark = async (req, res) => {
         await newTrademark.save();
         res.status(201).json({ message: 'Trademark created successfully!', trademark: newTrademark });
     } catch (error) {
+        console.error(error.message);
         res.status(500).json({ error: 'Failed to create trademark' });
+        
     }
 };
 
@@ -43,7 +45,7 @@ const removeEmptyFields = (obj) => {
 const searchTrademark = async (req, res) => {
     try {
         const { name } = req.params;
-        const response = await Trademark.find({ 'logoDetails.markDesc':{ $regex: name, $options: 'i' } }, {
+        const response = await Trademark.find({ 'logoDetails.markDesc':{ $regex: name, $options: 'i' }, 'status':'Register'}, {
             trademarkId: 1, classificationClass: 1,
             fileDate: 1, 'logoDetails.markDesc': 1, 'logoDetails.logoFile': 1, markDesc: 1, status: 1, _id: 0
         });
