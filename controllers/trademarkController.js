@@ -1,4 +1,5 @@
 const Trademark = require("../modals/trademark.js");
+const { ObjectId } = require('mongodb');
 
 const insertTradeMark = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ const insertTradeMark = async (req, res) => {
 
         const logoImagePath = req.files['logoFile'][0].filename;
 
-        if(req.files['licenseFile'] && req.files['licenseFile'][0]) {
+        if (req.files['licenseFile'] && req.files['licenseFile'][0]) {
             const licenseFilePath = req.files['licenseFile'][0].filename;
             cleanedData.applicationOwner.licenseFile = licenseFilePath;
         }
@@ -22,7 +23,7 @@ const insertTradeMark = async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: 'Failed to create trademark' });
-        
+
     }
 };
 
@@ -41,11 +42,25 @@ const removeEmptyFields = (obj) => {
     return cleanedObj;
 };
 
+const userTrademark = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = new ObjectId(id)
+        const registerd = await Trademark.countDocuments({ userId: userId, status: 'Register' });
+        const applied = await Trademark.countDocuments({ userId: userId, status: 'Pending' });
+        console.log(registerd, applied);
+        res.status(200).json({ registerd, applied });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: `An error has occurred while retrieving the user trademark data.` });
+    }
+    
+}
 
 const searchTrademark = async (req, res) => {
     try {
         const { name } = req.params;
-        const response = await Trademark.find({ 'logoDetails.markDesc':{ $regex: name, $options: 'i' }, 'status':'Register'}, {
+        const response = await Trademark.find({ 'logoDetails.markDesc': { $regex: name, $options: 'i' }, 'status': 'Register' }, {
             trademarkId: 1, classificationClass: 1,
             fileDate: 1, 'logoDetails.markDesc': 1, 'logoDetails.logoFile': 1, markDesc: 1, status: 1, _id: 0
         });
@@ -78,5 +93,6 @@ const trackTrademark = async (req, res) => {
 module.exports = {
     insertTradeMark,
     searchTrademark,
-    trackTrademark
+    trackTrademark,
+    userTrademark
 }
