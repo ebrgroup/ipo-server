@@ -9,7 +9,7 @@ const trademarkSchema = mongoose.Schema({
         ownerType: { type: String, sparse: true },
         licenseNo: { type: String, sparse: true },
         nameOfLawPractice: { type: String, sparse: true },
-        licenseFile: Buffer
+        licenseFile: String
     },
     classificationClass: { type: Number, sparse: true },
     detailsOfGoods: { type: String, sparse: true },
@@ -32,7 +32,7 @@ const trademarkSchema = mongoose.Schema({
         logoDescrpiption: { type: String, sparse: true },
         domainName: { type: String, sparse: true },
         colorClaimed: { type: String, sparse: true },
-        logoFile: Buffer
+        logoFile: String
     }
 });
 

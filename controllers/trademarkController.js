@@ -2,10 +2,23 @@ const Trademark = require("../modals/trademark.js");
 
 const insertTradeMark = async (req, res) => {
     try {
+        req.body.applicationOwner = JSON.parse(req.body.applicationOwner);
+        req.body.ownerDetails = JSON.parse(req.body.ownerDetails);
+        req.body.logoDetails = JSON.parse(req.body.logoDetails);
         const cleanedData = removeEmptyFields(req.body);
+
+        const logoImagePath = req.files['logoFile'][0].filename;
+
+        if(req.files['licenseFile'] && req.files['licenseFile'][0]) {
+            const licenseFilePath = req.files['licenseFile'][0].filename;
+            cleanedData.applicationOwner.licenseFile = licenseFilePath;
+        }
+
+        cleanedData.logoDetails.logoFile = logoImagePath;
+
         const newTrademark = new Trademark(cleanedData);
         await newTrademark.save();
-        res.status(201).json({ message: 'Trademark created successfully', trademark: newTrademark });
+        res.status(201).json({ message: 'Trademark created successfully!', trademark: newTrademark });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create trademark' });
     }
@@ -30,7 +43,7 @@ const removeEmptyFields = (obj) => {
 const searchTrademark = async (req, res) => {
     try {
         const { name } = req.params;
-        const response = await Trademark.find({ 'logoDetails.markDesc': name }, {
+        const response = await Trademark.find({ 'logoDetails.markDesc':{ $regex: name, $options: 'i' } }, {
             trademarkId: 1, classificationClass: 1,
             fileDate: 1, 'logoDetails.markDesc': 1, 'logoDetails.logoFile': 1, markDesc: 1, status: 1, _id: 0
         });
