@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
-const tradeMarkController = require("../controllers/trademarkController.js");
+const designController = require("../controllers/designController.js");
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -17,12 +17,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get('/trackIp/trademark/:id', tradeMarkController.trackTrademark);
-router.get('/searchIp/trademark/:name', tradeMarkController.searchTrademark);
+router.get('/trackIp/design/:id', designController.trackDesign);
+router.get('/searchIp/design/:name', designController.searchDesign);
 
-router.post("/trademark", 
-    upload.fields([{ name: 'licenseFile', maxCount: 1 }, { name: 'logoFile', maxCount: 1 }]), 
-    tradeMarkController.insertTradeMark
+router.post("/design", 
+    upload.fields([{ name: 'licenseFile', maxCount: 1 }, { name: 'attachmentFile', maxCount: 1 }]), 
+    designController.insertDesign
 );
 
 module.exports = router;

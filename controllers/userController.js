@@ -1,5 +1,8 @@
 const User = require('../modals/user');
+const Trademark = require('../modals/trademark');
+const Design = require('../modals/design');
 const bcrypt = require("bcrypt");
+const { ObjectId } = require('mongodb');
 
 const fetchUsersData = async (req, res) => {
     try 
@@ -275,6 +278,23 @@ const deleteUserData = async (req, res) => {
     }
 };
 
+const fetchUserIPsCount = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const userId = new ObjectId(id)
+
+        const registeredTrademarks = await Trademark.countDocuments({ userId: userId, status: 'Registered' });
+        const appliedTrademarks = await Trademark.countDocuments({ userId: userId, status: 'Pending' });
+        const registeredDesigns = await Design.countDocuments({ userId: userId, status: 'Registered' });
+        const appliedDesigns = await Design.countDocuments({ userId: userId, status: 'Pending' });
+        res.status(200).json({ registeredTrademarks, appliedTrademarks, registeredDesigns, appliedDesigns });
+    } catch (error) {
+        res.status(500).json({ error: `An error has occurred while retrieving the user's IPs data.` });
+        console.log(error)
+    }
+}
+
 module.exports = {
     fetchUsersData,
     fetchUserData,
@@ -285,5 +305,6 @@ module.exports = {
     resetPassword,
     deleteUserData,
     validateUserData,
-    fetchUserByEmail
+    fetchUserByEmail,
+    fetchUserIPsCount
 };

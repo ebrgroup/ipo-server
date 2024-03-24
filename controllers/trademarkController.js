@@ -110,20 +110,6 @@ const removeEmptyFields = (obj) => {
     return cleanedObj;
 };
 
-const userTrademark = async (req, res) => {
-    try {
-
-        const { id } = req.params;
-        const userId = new ObjectId(id)
-        const registerd = await Trademark.countDocuments({ userId: userId, status: 'Register' });
-        const applied = await Trademark.countDocuments({ userId: userId, status: 'Pending' });
-        res.status(200).json({ registerd, applied });
-    } catch (error) {
-        res.status(500).json({ error: `An error has occurred while retrieving the user trademark data.` });
-    }
-    
-}
-
 const searchTrademark = async (req, res) => {
     try {
         const { name } = req.params;
@@ -179,6 +165,5 @@ const trackTrademark = async (req, res) => {
 module.exports = {
     insertTradeMark,
     searchTrademark,
-    trackTrademark,
-    userTrademark
+    trackTrademark
 }

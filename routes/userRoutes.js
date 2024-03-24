@@ -7,6 +7,8 @@ router.get('/users', userController.fetchUsersData);
 
 router.get('/users/:id', userController.fetchUserData);
 
+router.get('/dashboard/user/countIp/:id', userController.fetchUserIPsCount);
+
 router.post('/users/email/', userController.fetchUserByEmail);
 
 router.post('/users', userController.createUserDocument);

@@ -17,7 +17,8 @@ const {
     userRoutes,
     emailRoutes,
     messagingRoutes,
-    trademarkRoutes
+    trademarkRoutes,
+    designRoutes
 } = require("./routes/index");
 
 // Create an express app
@@ -32,6 +33,7 @@ app.use("/ipo", userRoutes);
 app.use("/ipo", emailRoutes);
 app.use("/ipo", messagingRoutes);
 app.use("/ipo", trademarkRoutes);
+app.use("/ipo", designRoutes);
 app.get("/ipo/users/Request/:id", (req, res) => {
     userController.checkResetPasswordLink(req, res);
 });
